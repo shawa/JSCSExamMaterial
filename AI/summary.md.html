@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="/Users/shawa/.pandoc/normalize.css" type="text/css" />
+</head>
+<body>
+<p><meta http-equiv="refresh" content="5"></p>
+<h1 id="background-on-computationai">Background on Computation/AI</h1>
+<h2 id="agent-acting-intelligently-in-its-own-environment-dagger">Agent acting intelligently in its own environment (<span class="math inline">†</span>)</h2>
+<ul>
+<li>Actions appropriate for goals</li>
+<li>Flexibile to changing environments &amp; goals</li>
+<li>Learns from Experience</li>
+<li>Appropriate choices for limitations, finite computation</li>
+</ul>
+<h3 id="symbol-system-hypothesis">Symbol-System Hypothesis</h3>
+<blockquote>
+<p>A physical symbol system has the necessary and sufficient means for general intelligent action</p>
+</blockquote>
+<ul>
+<li>Necessity: Anything capable of intelligent action is a physical symbol system</li>
+<li>Sufficiency: Any (sufficiently sophisticated) PSS is capable of intelligent action</li>
+<li>Reasoning is Symbol Manipulation</li>
+<li>Symbols are <code>1</code> and <code>0</code> of computers, in which case it only means intelligence can be digitized</li>
+</ul>
+<h4 id="doubts">Doubts</h4>
+<ul>
+<li>The brain is not merely a computer, <em>computation</em> is not a complete model for intelligence</li>
+</ul>
+<h2 id="church-turing-thesis-and-its-relevance-to-ai">Church Turing Thesis and its relevance to AI</h2>
+<ul>
+<li>Any symbol manipulation possible on a Turing Machine</li>
+<li>Combined with <em>SSH</em>, any Intelligent Action possible on a Turing Machine</li>
+<li>Computation turns into Graph Search (express problem as a graph)</li>
+</ul>
+<h2 id="turing-machine">Turing machine</h2>
+<p>A theoretical machine to reason about computation. Reads and writes symbols to and from a tape (<span class="math inline">†</span>'s environment). A 6-tuple of:</p>
+<ul>
+<li><strong><span class="math inline"><em>Σ</em></span></strong> : Alphabet of Symbols</li>
+<li><strong><span class="math inline"><em>Q</em></span></strong> : Set of possible internal states</li>
+<li><strong><span class="math inline"><em>Q</em><sub>0</sub> ∈ <em>Q</em></span></strong> : Initial State</li>
+<li><strong><span class="math inline">_ ∈ <em>Σ</em></span></strong> : Blank symbol</li>
+<li><strong><span class="math inline"><em>A</em></span></strong> : Accepting/Final States</li>
+<li><strong><span class="math inline"><em>δ</em> ⊆ (<em>Q</em> \ <em>A</em> × <em>Σ</em>)×(<em>Q</em> × <em>Σ</em> × {<em>L</em>, <em>R</em>})</span></strong> : Relation on State-Symbol pairs, mapping to State-Symbol-Left/Right Movement</li>
+</ul>
+<p>Example: <span class="math inline">(<em>q</em>, <em>σ</em>),(<em>r</em>, <em>α</em>, <em>L</em>)</span> would enocde, if in state <span class="math inline"><em>q</em></span> and a <span class="math inline"><em>σ</em></span> is read, move to state <span class="math inline"><em>r</em></span>, write an <span class="math inline"><em>α</em></span> to the tape, and move Left.</p>
+<ul>
+<li><strong>Deterministic Turing Machine (DTM)</strong> has one State-Symbol-Left/Right triple per State-Symbol pair (it's a function)</li>
+<li><p><strong>Non-Deterministic Turing Machine (NTM)</strong> can have more than on S-S-LR per S-S pair.</p></li>
+<li><p><span class="math inline">†</span>: The environment is the tape, and the agent is the TM. If the TM reaches a state in <span class="math inline"><em>A</em></span>, then the action of the agent has been complete/solution to given problem found.</p></li>
+</ul>
+<h2 id="non-determinism">Non-determinism</h2>
+<ul>
+<li>Turing machine defines next state depending on current state, read symbol. An NTM has more than one S-S-LR triple per S-S pair.</li>
+<li><p>With computation as graph search</p>
+<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">search(<span class="dt">Node</span>) <span class="kw">:-</span> goal(<span class="dt">Node</span>)<span class="kw">.</span>
+search(<span class="dt">Node</span>) <span class="kw">:-</span> arc(<span class="dt">Node</span><span class="kw">,</span> <span class="dt">Next</span>)<span class="kw">,</span> search(<span class="dt">Next</span>)<span class="kw">.</span></code></pre></div>
+<p>there may exist more than one <span class="math inline"><em>N</em><em>e</em><em>x</em><em>t</em></span> for some <span class="math inline"><em>N</em><em>o</em><em>d</em><em>e</em></span>.</p></li>
+<li><strong>Don't know (Prolog does this)</strong> : If one choice doesn't lead to solution another might
+<ul>
+<li>Choose</li>
+</ul></li>
+<li><strong>Don't care (Paralog)</strong> : If one selection doesn't lead do a solution, no point in trying others
+<ul>
+<li>select</li>
+</ul></li>
+</ul>
+<p><span class="math inline">†</span>: Problem may be a non-deterministic one, and so needs an NTM to implement the Intelligent Agent to solve it feasibly.</p>
+<h2 id="p-vs-np"><span class="math inline"><em>P</em></span> vs <span class="math inline"><em>N</em><em>P</em></span></h2>
+<h3 id="cobhams-thesis">Cobham's Thesis</h3>
+<p>Feasible computation is defined as being solved by a Deterministic Turing Machine in Polynomial time (it's in <span class="math inline"><em>P</em></span>).</p>
+<p><br /><span class="math display"><em>P</em> := {problems solved by a Deterministic Turing Machine in Polynomial Time}</span><br /></p>
+<p><br /><span class="math display"><em>N</em><em>P</em> := {problems solved by a Non-deterministic Turing Machine in Polynomial Time}</span><br /></p>
+<p><span class="math inline"><em>P</em></span> is clearly <span class="math inline">⊆<em>N</em><em>P</em></span> as all DTMS can just be an NTM with only one triple in its <span class="math inline"><em>δ</em></span> relation (in which <span class="math inline"><em>δ</em></span> then defines a function).</p>
+<h2 id="sat">SAT</h2>
+<p>For some boolean expression <span class="math inline"><em>ϕ</em></span>, of variables <span class="math inline"><em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>, ⋯, <em>x</em><sub><em>n</em></sub></span>, find an assignment makes <span class="math inline"><em>ϕ</em></span> evaluate to True. Checking that it's True in P is easy, linear in <span class="math inline"><em>n</em></span>. Finding is hard due to non-determinism, many assignment to check.</p>
+<ul>
+<li><strong>Cook-Levin Theorem</strong> says <span class="math inline">SAT ∈ <em>P</em> ⇔ <em>P</em> = <em>N</em><em>P</em></span>.</li>
+<li><strong>CSAT</strong> : <span class="math inline"><em>ϕ</em></span> is a <em>conjunction</em> of <em>clauses</em> where a <em>clause</em> is a disjunction of <em>literals</em> and a literal is either a non-negated variable <span class="math inline"><em>x</em><sub><em>i</em></sub></span> (positive) or a negated variable <span class="math inline">¬<em>x</em><sub><em>i</em></sub></span> (negative).</li>
+<li><strong>k-SAT</strong> : Says each clause has <span class="math inline"><em>k</em></span> literals</li>
+<li><strong>3-SAT</strong> : Says each clause has <span class="math inline">3</span> literals. Is as hard as SAT, but 2-SAT is in P.
+<ul>
+<li><strong>horn-SAT</strong> : A conjunction of <em>horn</em> clause s, where a horn clause has at most 1 positive literal. Linear.</li>
+</ul></li>
+</ul>
+<h2 id="halting-problem">Halting Problem</h2>
+<p>Given a program <span class="math inline"><em>P</em></span>, and data <span class="math inline"><em>D</em></span> return 1 if <span class="math inline"><em>P</em></span> halts on <span class="math inline"><em>D</em></span>, otherwise 0 (if it loops indefinitely). It is undecidable.</p>
+<h3 id="proof-by-contadiction">Proof (by contadiction)</h3>
+<ul>
+<li>Assume for contadiction's sake <span class="math inline">∃</span> program <span class="math inline"><em>h</em><em>a</em><em>l</em><em>t</em>(<em>P</em>, <em>D</em>)</span> that returns 1 iff P halts on D, otherwise 0.</li>
+<li><p>Now construct a new program/string <span class="math inline"><em>Z</em></span></p>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="kw">def</span> Z(<span class="dt">String</span> x)
+    <span class="kw">if</span> halt(x, x) <span class="kw">then</span>
+         loop forever
+    <span class="kw">else</span>
+        halt
+    <span class="kw">end</span>
+<span class="kw">end</span></code></pre></div>
+and run it on itself, i.e. <code>Z(Z)</code>. There are 2 cases:
+<ol style="list-style-type: decimal">
+<li><span class="math inline"><em>Z</em></span> halts on <span class="math inline"><em>Z</em></span>. Then the call to <code>Halt(Z, Z)</code> will return <code>True</code>, so <span class="math inline"><em>Z</em></span> loops forever on <span class="math inline"><em>Z</em></span>.
+<ul>
+<li>Contradiction</li>
+</ul></li>
+<li><span class="math inline"><em>Z</em></span> loops forever on <span class="math inline"><em>Z</em></span>. Then the call to <code>Halt(Z, Z)</code> returns <code>False</code>, so <span class="math inline"><em>Z</em></span> halts on <span class="math inline"><em>Z</em></span>
+<ul>
+<li>Contradiction.</li>
+</ul></li>
+</ol></li>
+<li><p>Conclude that <span class="math inline"><em>h</em><em>a</em><em>l</em><em>t</em></span> cannot exist, so there is no general method to decide if some <span class="math inline"><em>P</em></span> will halt on some <span class="math inline"><em>D</em></span>.</p></li>
+</ul>
+<p>Prolog consequence is that there's no general algorithm to detect loops caused by KBs such as</p>
+<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">p <span class="kw">:-</span> q<span class="kw">.</span>
+q <span class="kw">:-</span> p<span class="kw">.</span>
+
+a <span class="kw">:-</span> a<span class="kw">.</span></code></pre></div>
+<p>etc.</p>
+<h2 id="church-turing-thesis">Church-Turing Thesis</h2>
+<blockquote>
+<p>A function is effectively calculable if its values can be found by some purely mechanical process.</p>
+</blockquote>
+<h3 id="halting-problem-implications">Halting Problem implications:</h3>
+<p>Can define functions which are not computable.</p>
+<ul>
+<li><code>busy_beaver(n)</code>: given a TM with <span class="math inline"><em>n</em></span> possible states, how many symbols can it write before halting when run with no input?</li>
+</ul>
+<p>Can't get an upper bound on this without solving the halting problem. Since <em>CTT</em> says you can compute anything on a <em>TM</em> this is uncomputable by any method.</p>
+<h2 id="cantors-theorem">Cantor's Theorem</h2>
+<p><span class="math inline">∀<em>ω</em>, |2<sup><em>ω</em></sup>| &gt; |<em>ω</em>|</span></p>
+<p>TODO: Prove this</p>
+<h1 id="knowlege-representation-and-reasoning">Knowlege Representation and Reasoning</h1>
+<h2 id="representation-and-reasoning-system">Representation and Reasoning System</h2>
+<h3 id="definitions">Definitions</h3>
+<ul>
+<li><strong>Formal Language</strong> : legal sentences</li>
+<li><strong>Semantics</strong> : meaning of the symbols</li>
+<li><strong>Reasoning theory/proof procedure</strong> <em>nondeterministic</em> specification for how to produce and answer</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<ul>
+<li><strong>Language Parser</strong> : Sentences <span class="math inline">→</span> Data Structures</li>
+<li><strong>Reasoning Procedure</strong> : implementation of reasoning theory, search strategey
+<ul>
+<li>Does <em>not</em> reflect semantics (It's a symbol-system manipluation)</li>
+</ul></li>
+</ul>
+<h3 id="datalog">Datalog</h3>
+<p><strong>propositional definite clause</strong> : one of these?</p>
+<ul>
+<li>variable : starts with upper case</li>
+<li>constant : starts with lower case, or is a numeral</li>
+<li>predicate symbol : stars with lower case</li>
+<li>term : variable or a constant</li>
+<li><strong>atomic symbol (atom)</strong> : <span class="math inline"><em>p</em></span> or <span class="math inline"><em>p</em>(<em>t</em><sub>1</sub>, ⋯, <em>t</em><sub><em>n</em></sub>)</span>, with <span class="math inline"><em>p</em></span> a predicate and each <span class="math inline"><em>t</em><sub><em>i</em></sub></span> is a term.</li>
+<li><strong>definite clause</strong> : <span class="math inline"><em>a</em> ← <em>b</em><sub>1</sub> ∧ ⋯ ∧ <em>b</em><sub><em>m</em></sub></span></li>
+<li><strong>query</strong> : <span class="math inline">?<em>b</em>1 ∧ ⋯ ∧ <em>b</em><em>m</em></span></li>
+<li><strong>knowlege base</strong> : set of definite clauses</li>
+</ul>
+<h2 id="semantics">Semantics</h2>
+<p>Meaning of sentences in a language</p>
+<h3 id="interpretation">Interpretation</h3>
+<p>What is in the world, symbol-to-real-things-and-relations correspondence</p>
+<p>Triple <span class="math inline"><em>I</em> = ⟨<em>D</em>, <em>ϕ</em>, <em>π</em>⟩</span></p>
+<ul>
+<li><strong>D</strong> : Nonempty domain set. Elements are <em>individuals</em></li>
+<li><strong><span class="math inline"><em>ϕ</em></span></strong> : mapping each constant to an individual. A constant <span class="math inline"><em>c</em></span> denotes an individual <span class="math inline"><em>ϕ</em>(<em>c</em>)</span></li>
+<li><strong><span class="math inline"><em>π</em></span></strong> : maps each to <span class="math inline"><em>n</em></span>-ary predicate symbol a relation
+<ul>
+<li>ie <span class="math inline"><em>π</em> : <em>D</em><sup><em>n</em></sup> ↦ {True, False}</span></li>
+</ul></li>
+</ul>
+<h4 id="notes">Notes</h4>
+<ul>
+<li><span class="math inline"><em>D</em></span> can be actual real things, not confined to being in a computer.</li>
+<li><span class="math inline"><em>π</em>(<em>p</em>)</span> specifies truthiness for the predicate symbol <span class="math inline"><em>p</em></span>, for each <span class="math inline"><em>n</em></span>-tuple of individuals</li>
+<li>if <span class="math inline"><em>p</em></span> has no arguments, then <span class="math inline"><em>π</em>(<em>p</em>)</span> either True or False.</li>
+</ul>
+<h3 id="truth-in-interpretation">Truth in Interpretation</h3>
+<ul>
+<li><span class="math inline"><em>c</em></span> <em>denotes in I</em> the individual <span class="math inline"><em>ϕ</em>(<em>c</em>)</span>.</li>
+<li><strong>Ground</strong> (variable free) atom <span class="math inline"><em>p</em>(<em>t</em><sub>1</sub>, ⋯, <em>t</em><sub><em>n</em></sub>)</span>, in <strong>Interpretation <span class="math inline"><em>I</em></span></strong> is
+<ul>
+<li><strong>True</strong> if <span class="math inline"><em>π</em>(<em>p</em>)(<em>t</em>′<sub>1</sub>, ⋯, <em>t</em>′<sub><em>n</em></sub>)=True</span></li>
+<li><strong>False</strong> if <span class="math inline"><em>π</em>(<em>p</em>)(<em>t</em>′<sub>1</sub>, ⋯, <em>t</em>′<sub><em>n</em></sub>)=False</span>
+<ul>
+<li>Where <span class="math inline"><em>t</em><sub><em>i</em></sub></span> denotes <span class="math inline"><em>t</em>′<sub><em>i</em></sub></span> in interpretation <span class="math inline"><em>I</em></span></li>
+</ul></li>
+</ul></li>
+<li>Ground clause <span class="math inline"><em>h</em> ← <em>b</em><sub>1</sub> ∧ ⋯<em>b</em><sub><em>m</em></sub></span> is <strong>False in <span class="math inline"><em>I</em></span></strong> if <span class="math inline"><em>h</em></span> is False in <span class="math inline"><em>I</em></span> and each <span class="math inline"><em>b</em><sub><em>i</em></sub></span> is True in <span class="math inline"><em>I</em></span>.
+<ul>
+<li>Otherwise it's <span class="math inline"><em>T</em><em>r</em><em>u</em><em>e</em></span> in <span class="math inline"><em>I</em></span>.</li>
+</ul></li>
+</ul>
+<h3 id="models-logical-consequence">Models, Logical Consequence</h3>
+<ul>
+<li>A Knowledge Base <span class="math inline"><em>K</em><em>B</em></span> is True in interpretation <span class="math inline"><em>I</em></span> iff every clause in KB is True in interpretation <span class="math inline"><em>I</em></span> iff every clause in <span class="math inline"><em>K</em><em>B</em></span> is True in I.</li>
+<li>a <strong>model</strong> is an interpretation in which all clauses are True</li>
+<li><span class="math inline"><em>g</em></span> is a <strong>logical consequence</strong> of <span class="math inline"><em>K</em><em>B</em></span> (<span class="math inline"><em>K</em><em>B</em> ⊨ <em>g</em></span>), if <span class="math inline"><em>g</em></span> is True in every models of KB.
+<ul>
+<li>(<span class="math inline"><em>K</em><em>B</em> ⊨ <em>g</em></span>) if there's no <span class="math inline"><em>I</em></span> such that <span class="math inline"><em>K</em><em>B</em></span> is True <span class="math inline">∧</span> <span class="math inline"><em>g</em></span> is False.</li>
+</ul></li>
+</ul>
+<h4 id="for-users">For Users</h4>
+<ol style="list-style-type: decimal">
+<li>Come up with an <strong>intended interpretation</strong> <span class="math inline"><em>I</em></span>
+<ul>
+<li>the problem domain</li>
+</ul></li>
+<li>Pick constants for the relevant individuals
+<ul>
+<li>e.g. <code>shibe</code> for your pet</li>
+</ul></li>
+<li>Pick a predicate symbol for the relations
+<ul>
+<li><code>is_dog</code> to denote a constant's individual being a dog</li>
+</ul></li>
+<li>Tell it things that are True in <span class="math inline"><em>I</em></span>
+<ul>
+<li>build up the knowlege base by <strong>axiomatizing the domain</strong> )</li>
+<li><code class="sourceCode prolog">is_dog(<span class="dt">X</span>) <span class="kw">:-</span> barks(<span class="dt">X</span>)<span class="kw">.</span></code></li>
+<li><code class="sourceCode prolog">barks(shibe)<span class="kw">.</span></code>, etc.</li>
+</ul></li>
+<li>Ask it things
+<ul>
+<li><code>? is_dog(shibe)</code> <span class="math inline">→</span> <code class="sourceCode prolog">yes</code>.</li>
+</ul></li>
+<li>Now if <span class="math inline"><em>K</em><em>B</em> ⊨ <em>g</em></span>, then <span class="math inline"><em>g</em></span> must be True in <span class="math inline"><em>I</em></span>
+<ul>
+<li>Your pet must indeed be a dog.</li>
+</ul></li>
+</ol>
+<h4 id="for-computers">For Computers</h4>
+<ul>
+<li>Knows nothing about the interpretation, only <span class="math inline"><em>K</em><em>B</em></span>.
+<ul>
+<li>What's a dog? What is barks?</li>
+</ul></li>
+<li><em>Can</em> determine if some <span class="math inline"><em>g</em></span> is an LC of <span class="math inline"><em>K</em><em>B</em></span>, so if <span class="math inline"><em>K</em><em>B</em> ⊨ <em>g</em></span>, then it's True in <span class="math inline"><em>I</em></span>.</li>
+<li>If <span class="math inline">¬(<em>K</em><em>B</em> ⊨ <em>g</em>)</span>, then <span class="math inline">∃</span> some Interpretation in which <span class="math inline"><em>g</em></span> is False. This could be the intended interpretation I.</li>
+</ul>
+</body>
+</html>

@@ -1,6 +1,5 @@
 <meta http-equiv="refresh" content="5">
 
-
 # Background on Computation/AI
 ## Agent acting intelligently in its own environment ($\dagger$)
 * Actions appropriate for goals
@@ -205,3 +204,5 @@ Triple $I = \langle D, \phi, \pi \rangle$
     * What's a dog? What is barks?
 * _Can_ determine if some $g$ is an LC of $KB$, so if $KB \models g$, then it's True in $I$.
 * If $\neg (KB \models g)$, then $\exists$ some Interpretation in which $g$ is False. This could be the intended interpretation I.
+
+## Proofs
