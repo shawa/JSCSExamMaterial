@@ -158,3 +158,133 @@ There's nondeterminism in the choice of C here:
 
 * **Don't care** : If one doesn't lead to solution, none of the others will.
 * **Don't know** : If one choice doesn't lead to the solution, others might.
+
+## Knowlege Representation
+* How to represent _"Coco is a Shiba Inu"_
+* Could do something like `shibe(coco)`
+    * "Who are the shibes?" easy to solve
+* Or `breed(coco, shibe)`
+    * "What breed is Coco"
+    * "What dogs are the Shiba Inu"
+    * ~~"What property is "Shiba Inu?"~~ It's a `breed`, but we can't resolve this easily.
+* Solution: `prop(coco, breed, shibe)`. Now we can solve it all with the usual strategies. Called **object-attribute-value** representation.
+    * `prop(coco, is_a, shibe)`
+    * `prop(coco, shibe, true)`
+* **Reification** : translating a scenario into object.
+
+### Frames
+This can all be brought into a **frame**, collection of attribute-value pairs:
+```perl
+[ owned_by = craig
+, deliver_to = ming
+, model = lemon_laptop_1000 ...  ]
+```
+etc.
+
+### Relations
+* **Primitive knowlege** : defined explicity
+* **Derived knowlege** : defined by rules
+
+With an `is_a` attribute, we can do **property inheritance**. Every individual in a class has $n$ for some attribute $p$.
+
+No reason not to allow **multiple inheritance**, where an object is a member of multiple classes. There can be conflicts, for example if both classes define a different default for some property (_multiple inheritance problem_).
+
+Associate most general class with an attribute, don't add properties willy-nilly, and axiomatize in the causal direction.
+
+## Complete Knowlege Assumption (CKA)
+> Any fact not listed in a Knowlege Base is False
+
+The definite clause system is **monotonic**, that is, if we add a clause, it doesn't cause other clauses to be false. (It doesn't invalidate previous conclusions)
+
+Adding the CKA, the system is **non monotonic**; we _can_ invalidate a conclusion by adding more clauses.
+
+### Example
+```prolog
+student(mary).
+student(john).
+student(ying).
+```
+* Under the CKA, this means  $\text{student}(X) \iff X = \text{mary} \lor X = \text{john} \lor X = \text{ying}$
+* So to prove that $\neg \text{student}(\text{alan})$, you need $\text{alan} \neq \text{mary} \land \text{alan} \neq \text{john} \land \text{alan} \neq \text{ying}$
+    * Need unique names assumption
+
+### Clarke Completion
+```prolog
+mem(X, [X|T]).
+mem(X, [H|T]) :- mem (X, T).
+```
+
+becomes
+```prolog
+mem(X, Y) <=> (eT Y == [X | T]) or
+              (eH eT T == [H | T] and mem(X, T)).
+```
+_Where `e` is $\exists$_
+
+* Completion of every predicate, and equality/inequality axioms.
+* If $p$ in the KB is defined by no clauses, then it completes to $p \leftrightarrow \text{False}$. i.e. $\neg p$.
+* **Negation as Failure** : Interpret negations in clause bodies. $\sim p$ means $p$ is False under CKA.
+
+#### Bottom up Negation as Failure proof Procedure
+```
+C = {};
+until no more selections possible
+    either
+        select "h <- b1 or ... or b_n" in KB such that
+            bi in C for all i, and h not in C;
+        C = C union {h}
+    or
+        select h such that
+            for each "h <- b1 or ... or b_n" in KB
+                either
+                    exists b_i such that ~b_i in C
+                or
+                    exists b_i such that b_i = ~g, and g in C
+                end
+        C = C union {~h}
+    end
+end
+```
+
+* If this procedure fails, then $\neg a$ can be concluded.
+* Say we have $a \leftarrow b_1, \cdots, a \leftarrow b_n,$, need all of them to fail. It needs to be _finite_ however, like $p \leftarrow p$ is not decidable with bottom up.
+    * Halting problem means these things are undetectable in the general case too!
+
+* If trying to NAF a query that has unbound variables, the NAF must be **delayed** until the variable is bound, otherwise it **flounders**.
+
+## Integrity Constraints
+* $\text{false} \leftarrow a_1 \land \cdots \land \a_k$
+    * With $a_i$ atoms, $\text{false}$ an atom that's False in all interpretations.
+* **Horn Clauses** are either definite clauses or integrity constraints.
+* $\neg \alpha$ is a formula which is
+    * True in $I$ if $\alpha$ is False in $I$ and
+    * False in $I$ if $\alpha$ is True in $I$
+
+Suppose we have KB
+
+* $\text{false} \leftarrow a \land b$
+* $a \leftarrow c$
+* $b \leftarrow c$
+    * Then $KB \models \neg c$
+
+Can also be **disjuctive conclusions**:
+
+* $\text{false} \leftarrow a \land b$
+* $a \leftarrow c$
+* $b \leftarrow d$
+    * Then $KB \models \neg c \lor \neg d$
+
+### Questions and Answers
+* **assumable** : an atom whose negation is acceptably included in the (disjuntive answer)
+    * Hand-wavily 'assumably' true
+* **conflict** : a set of assumables which imply _False_ for a KB
+* **minimal conflict** : a conflict with no strict subsets that are also conflicts
+* **consistency-based diagnosis** : set of assumables that has one element in each conflict
+* **minimal diagnosis** : no strict subset is a diagnosis
+
+### Bottom Up Conflict Finding
+* **conclusion** : a pair $\langle a, A \rangle$ with $a$ an atom, and $A$ a set of assumbables which imply $a$.
+
+
+## Rules and Consistency
+* $g$ is $KB$-**consistent** if it's true in some model of $KB$.
