@@ -30,7 +30,7 @@ A 6-tuple of:
 * **$\Sigma$** : Alphabet of Symbols
 * **$Q$** : Set of possible internal states
 * **$Q_0 \in Q$** : Initial State
-* **$\_ \in \Sigma$** : Blank symbol
+* **$\epsilon \in \Sigma$** : Blank symbol
 * **$A$** : Accepting/Final States
 * **$\delta \subseteq (Q \setminus  A \times \Sigma) \times (Q \times \Sigma \times \{L, R\})$** : Relation on State-Symbol pairs, mapping to State-Symbol-Left/Right Movement
 

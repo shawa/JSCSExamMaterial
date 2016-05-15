@@ -1,3 +1,3 @@
-summary.pdf: summary.md
-	pandoc -o $@ $<
+notes.pdf: background.md search.md knowlege.md
+	pandoc -o $@ $^
 

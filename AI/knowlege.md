@@ -253,7 +253,7 @@ end
 * If trying to NAF a query that has unbound variables, the NAF must be **delayed** until the variable is bound, otherwise it **flounders**.
 
 ## Integrity Constraints
-* $\text{false} \leftarrow a_1 \land \cdots \land \a_k$
+* $\text{false} \leftarrow a_1 \land \cdots \land a_k$
     * With $a_i$ atoms, $\text{false}$ an atom that's False in all interpretations.
 * **Horn Clauses** are either definite clauses or integrity constraints.
 * $\neg \alpha$ is a formula which is
