@@ -112,3 +112,40 @@ Depends on the problem domain.
 * Pick the path whose end is closest to the goal, addording to $h$.
 * Gets a path of minimal $h$ value
 * Frontier is a **priority queue ordered by $h$**.
+* Space is exponential in path length.
+* Not guaranteed to find a solution, even if there is one.
+* Doesn't always find shortest path.
+
+### Heuristic Best First
+* Order a node's neighbours by $h$ _before_ pushing them on to the frontier
+* The subtrees are developed locally, but it still explores all paths from the node before moving on to the rest of the frontier
+* Linear space in path length
+* Does _not_ always find a solution
+
+## <span style="color:red">A* Search</span>
+* Use both the path cost _and_ $h$.
+* With $\text{cost}(p)$ the cost of the path p, and $h(p)$ the estimate of the end of $p$ to the goal,  let $f(p) = \text{cost}(p) + h(p)$
+* `start ---cost(p)--> n ---h(n)--> goal`
+* Lowest cost first _and_ best-first.
+* Frontier is a **priority queue ordered by $f$**.
+* Always selects node on the frontier with lowest estimated distance from start to goal, when constrained to go through that node.
+
+### A* Admissibility
+* Always finds a solution if it exists, as long as:
+    1. Branching factor is finite
+    2. All of the arc costs are greater than 0. ($\exists \epsilon > 0 : \forall \text{arc cost } c, c > \epsilon$)
+    3. $h(n)$ is an _underestimate_ of the shortest path from $n$ to a goal
+
+#### Proof of admissibility
+Say A* picks a path $p$ to the goal. This is _always_ the shortest path:
+Suppose $p'$ also on the frontier. $p$ was chosen before $p'$, and $h(p) = 0$ (it's already at the goal), so we know $\text{cost}(p) \leq \text{cost}(p') + h(p')$.
+
+Now $h$ is an underestimae, so $\text{cost}(p') + h(p') \leq \text{cost}(p'')$, $\forall p''$ from $p'$ to the goal.
+
+Which means $\text{cost}(p) \leq \text{cost}(p'')$ , $\forall p''$ from $p'$ to the goal.
+
+* There's always an element of an optimal solution on the frontier, as by the abstract algorithm, there's an initial part of every path to the goal.
+* A* will halt, as the minimum $g$-value keeps increasing and tends to infinity.
+    - TODO: What on earth is the $g$ value? $h$ value?
+
+
