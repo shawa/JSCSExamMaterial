@@ -1,5 +1,3 @@
-<meta http-equiv="refresh" content="2">
-
 # Knowlege Representation and Reasoning
 ## Representation and Reasoning System
 ### Definitions
