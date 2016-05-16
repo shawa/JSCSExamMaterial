@@ -52,10 +52,10 @@
 
 
 # Search
-* [ ] Frontier Search variable depending on `add_to_frontier`{.prolog}
-    * [ ] How to define to get depth-first search? (DFS)
-        * [ ] Bounded DFS
-    * [ ] How to define to get breadth-first search? (DFS)
+* [x] Frontier Search variable depending on `add_to_frontier`{.prolog}
+    * [x] How to define to get depth-first search? (DFS)
+        * [x] Bounded DFS
+    * [x] How to define to get breadth-first search? (DFS)
 * [ ] For frontier search can reduce frontier to single node, not list of nodes.
 * [ ] Nondeterministic FSM is `Trans, Final`, $Trans \in Q \times \Sigma \times Q$, $Final$ list of accepting states. Define `accept/3(Trans, Final, String)`{.prolog} to accept a string.
 * [ ] Show this is a search procedure with arc/goal.

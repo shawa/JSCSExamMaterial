@@ -67,6 +67,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li><a href="#cantors-theorem">Cantor’s Theorem</a></li>
 </ul></li>
+<li><a href="#search">Search</a><ul>
+<li><a href="#frontier-search">Frontier Search</a></li>
+<li><a href="#prolog-examples">Prolog Examples</a></li>
+</ul></li>
 <li><a href="#knowlege-representation-and-reasoning">Knowlege Representation and Reasoning</a><ul>
 <li><a href="#representation-and-reasoning-system">Representation and Reasoning System</a><ul>
 <li><a href="#definitions">Definitions</a></li>
@@ -78,24 +82,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#truth-in-interpretation">Truth in Interpretation</a></li>
 <li><a href="#models-logical-consequence">Models, Logical Consequence</a></li>
 </ul></li>
-<li><a href="#proofs">Proofs</a></li>
-</ul></li>
-<li><a href="#search">Search</a><ul>
-<li><a href="#frontier-search">Frontier Search</a></li>
-<li><a href="#prolog-examples">Prolog Examples</a></li>
-</ul></li>
-<li><a href="#knowlege-representation-and-reasoning-1">Knowlege Representation and Reasoning</a><ul>
-<li><a href="#representation-and-reasoning-system-1">Representation and Reasoning System</a><ul>
-<li><a href="#definitions-1">Definitions</a></li>
-<li><a href="#implementation-1">Implementation</a></li>
-<li><a href="#datalog-1">Datalog</a></li>
-</ul></li>
-<li><a href="#semantics-1">Semantics</a><ul>
-<li><a href="#interpretation-1">Interpretation</a></li>
-<li><a href="#truth-in-interpretation-1">Truth in Interpretation</a></li>
-<li><a href="#models-logical-consequence-1">Models, Logical Consequence</a></li>
-</ul></li>
-<li><a href="#proofs-1">Proofs</a><ul>
+<li><a href="#proofs">Proofs</a><ul>
 <li><a href="#bottom-up">Bottom Up</a></li>
 <li><a href="#top-down">Top Down</a></li>
 </ul></li>
@@ -239,6 +226,60 @@ a <span class="kw">:-</span> a<span class="kw">.</span></code></pre></div>
 <h2 id="cantors-theorem">Cantor’s Theorem</h2>
 <p><span class="math inline">∀<em>ω</em>, |2<sup><em>ω</em></sup>| &gt; |<em>ω</em>|</span></p>
 <p>TODO: Prove this</p>
+<h1 id="search">Search</h1>
+<p>Basic graph searching (Depth first)</p>
+<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">arc(<span class="dt">Node</span><span class="kw">,</span> <span class="dt">Next</span>) <span class="kw">:-</span> <span class="co">% Something that relates Node to Next.</span>
+search(<span class="dt">Node</span>) <span class="kw">:-</span> goal(<span class="dt">Node</span>)<span class="kw">.</span>
+search(<span class="dt">Node</span>) <span class="kw">:-</span> arc(<span class="dt">Node</span><span class="kw">,</span> <span class="dt">Next</span>)<span class="kw">,</span> search(<span class="dt">Next</span>)<span class="kw">.</span></code></pre></div>
+<ul>
+<li>Nondeterminism if <code>arc/2</code> has multiple solutions
+<ul>
+<li>Choose the best one (A*, Best first, etc)</li>
+</ul></li>
+<li>Computation eliminates the non-determinism</li>
+<li>Can bound the number of calls to <code>arc</code>, the number of search iterations.</li>
+</ul>
+<h2 id="frontier-search">Frontier Search</h2>
+<ul>
+<li>With a <strong>graph</strong>, <strong>start nodes</strong> and <strong>goal nodes</strong>, incrementally explore paths from start nodes, hoping to reach goal nodes.</li>
+<li>Maintain a <strong>frontier</strong> of paths from start that have been explored.</li>
+<li>Search is complete once frontier hits a goal.</li>
+<li>How the frontier expands (how the child nodes of the current frontier are inserted to the frontier) can vary, defines the <strong>search strategy</strong></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">frontier := { s : s is a start node }
+<span class="kw">until</span> frontier.empty
+    select <span class="kw">and</span> remove path &lt;n_0, ... ,n_k&gt; from frontier;
+    <span class="kw">if</span> goal(n_k)
+        <span class="kw">return</span> &lt;n_0, ... , n_k&gt;;
+    <span class="kw">end</span>
+
+    <span class="kw">for</span> each neighbor n of n_k;
+        add &lt;n_0, ... , n_k, n&gt; to frontier
+    <span class="kw">end</span>
+<span class="kw">end</span></code></pre></div>
+<h2 id="prolog-examples">Prolog Examples</h2>
+<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">search(<span class="dt">Start</span>) <span class="kw">:-</span> frontier_search([<span class="dt">Start</span>])<span class="kw">.</span>
+
+frontier_search([<span class="dt">Node</span><span class="fu">|</span><span class="dt">_</span>]) <span class="kw">:-</span> goal(<span class="dt">Node</span>)<span class="kw">.</span>
+frontier_search([<span class="dt">Node</span><span class="fu">|</span><span class="dt">Rest</span>]) <span class="kw">:-</span>
+    findall(<span class="dt">Next</span><span class="kw">,</span> arc(<span class="dt">Node</span><span class="kw">,</span> <span class="dt">Next</span>)<span class="kw">,</span> <span class="dt">Children</span>)<span class="kw">,</span>
+    add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> <span class="dt">New</span>)<span class="kw">,</span>  <span class="co">% add the neighbours to the frontier</span>
+    frontier_search(<span class="dt">New</span>)<span class="kw">.</span></code></pre></div>
+<p>The strategy depends on how <code>add_to_frontier/3</code> is defined:</p>
+<p>Depth-first, empty the <code>Children</code> before adding the <code>New</code>:</p>
+<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">add_to_frontier([]<span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> <span class="dt">Rest</span>)<span class="kw">.</span>
+add_to_frontier([<span class="dt">H</span><span class="fu">|</span><span class="dt">T</span>]<span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> [<span class="dt">H</span>, <span class="dt">New</span>]) <span class="kw">:-</span> add_to_frontier(<span class="dt">T</span><span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> <span class="dt">New</span>)</code></pre></div>
+<p>Breadth-first, empty the <code>New</code> before adding the <code>Children</code>:</p>
+<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> []<span class="kw">,</span> <span class="dt">Children</span>)<span class="kw">.</span>
+add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> [<span class="dt">H</span><span class="fu">|</span><span class="dt">T</span>]<span class="kw">,</span> <span class="dt">Children</span>) add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> <span class="dt">T</span><span class="kw">,</span> <span class="dt">New</span>)<span class="kw">.</span> </code></pre></div>
+<p>Bounded Depth First by adding an iteration-counting term:</p>
+<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">bounded_search(<span class="dt">Node</span><span class="kw">,</span> <span class="dt">_</span>) <span class="kw">:-</span> goal(<span class="dt">Node</span>)<span class="kw">.</span>
+bounded_search(<span class="dt">Node</span><span class="kw">,</span> s(<span class="dt">B</span>)) <span class="kw">:-</span> bounded_search(<span class="dt">B</span>)<span class="kw">.</span></code></pre></div>
+<p>Iterative deepening is depth first with a variable bound:</p>
+<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">iterative_deepening(<span class="dt">Node</span>) <span class="kw">:-</span> bound(<span class="dt">B</span>)<span class="kw">,</span> bs(<span class="dt">Next</span><span class="kw">,</span> <span class="dt">B</span>)<span class="kw">.</span>
+
+bound(<span class="dv">0</span>)<span class="kw">.</span>
+bound(s(<span class="dt">B</span>)) <span class="kw">:-</span> bound(<span class="dt">B</span>)<span class="kw">.</span> <span class="co">% easily adjustable</span></code></pre></div>
 <h1 id="knowlege-representation-and-reasoning">Knowlege Representation and Reasoning</h1>
 <h2 id="representation-and-reasoning-system">Representation and Reasoning System</h2>
 <h3 id="definitions">Definitions</h3>
@@ -350,171 +391,6 @@ a <span class="kw">:-</span> a<span class="kw">.</span></code></pre></div>
 <li>If <span class="math inline">¬(<em>K</em><em>B</em> ⊨ <em>g</em>)</span>, then <span class="math inline">∃</span> some Interpretation in which <span class="math inline"><em>g</em></span> is False. This could be the intended interpretation I.</li>
 </ul>
 <h2 id="proofs">Proofs</h2>
-<h1 id="search">Search</h1>
-<p>Basic graph searching (Depth first)</p>
-<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">arc(<span class="dt">Node</span><span class="kw">,</span> <span class="dt">Next</span>) <span class="kw">:-</span> <span class="co">% Something that relates Node to Next.</span>
-search(<span class="dt">Node</span>) <span class="kw">:-</span> goal(<span class="dt">Node</span>)<span class="kw">.</span>
-search(<span class="dt">Node</span>) <span class="kw">:-</span> arc(<span class="dt">Node</span><span class="kw">,</span> <span class="dt">Next</span>)<span class="kw">,</span> search(<span class="dt">Next</span>)<span class="kw">.</span></code></pre></div>
-<ul>
-<li>Nondeterminism if <code>arc/2</code> has multiple solutions
-<ul>
-<li>Choose the best one (A*, Best first, etc)</li>
-</ul></li>
-<li>Computation eliminates the non-determinism</li>
-<li>Can bound the number of calls to <code>arc</code>, the number of search iterations.</li>
-</ul>
-<h2 id="frontier-search">Frontier Search</h2>
-<ul>
-<li>With a <strong>graph</strong>, <strong>start nodes</strong> and <strong>goal nodes</strong>, incrementally explore paths from start nodes, hoping to reach goal nodes.</li>
-<li>Maintain a <strong>frontier</strong> of paths from start that have been explored.</li>
-<li>Search is complete once frontier hits a goal.</li>
-<li>How the frontier expands (how the child nodes of the current frontier are inserted to the frontier) can vary, defines the <strong>search strategy</strong></li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">frontier := { s : s is a start node }
-<span class="kw">until</span> frontier.empty
-    select <span class="kw">and</span> remove path &lt;n_0, ... ,n_k&gt; from frontier;
-    <span class="kw">if</span> goal(n_k)
-        <span class="kw">return</span> &lt;n_0, ... , n_k&gt;;
-    <span class="kw">end</span>
-
-    <span class="kw">for</span> each neighbor n of n_k;
-        add &lt;n_0, ... , n_k, n&gt; to frontier
-    <span class="kw">end</span>
-<span class="kw">end</span></code></pre></div>
-<h2 id="prolog-examples">Prolog Examples</h2>
-<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">search(<span class="dt">Start</span>) <span class="kw">:-</span> frontier_search([<span class="dt">Start</span>])<span class="kw">.</span>
-
-frontier_search([<span class="dt">Node</span><span class="fu">|</span><span class="dt">_</span>]) <span class="kw">:-</span> goal(<span class="dt">Node</span>)<span class="kw">.</span>
-frontier_search([<span class="dt">Node</span><span class="fu">|</span><span class="dt">Rest</span>]) <span class="kw">:-</span>
-    findall(<span class="dt">Next</span><span class="kw">,</span> arc(<span class="dt">Node</span><span class="kw">,</span> <span class="dt">Next</span>)<span class="kw">,</span> <span class="dt">Children</span>)<span class="kw">,</span>
-    add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> <span class="dt">New</span>)<span class="kw">,</span>  <span class="co">% add the neighbours to the frontier</span>
-    frontier_search(<span class="dt">New</span>)<span class="kw">.</span></code></pre></div>
-<p>The strategy depends on how <code>add_to_frontier/3</code> is defined:</p>
-<p>Depth-first, empty the <code>Children</code> before adding the <code>New</code>:</p>
-<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">add_to_frontier([]<span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> <span class="dt">Rest</span>)<span class="kw">.</span>
-add_to_frontier([<span class="dt">H</span><span class="fu">|</span><span class="dt">T</span>]<span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> [<span class="dt">H</span>, <span class="dt">New</span>]) <span class="kw">:-</span> add_to_frontier(<span class="dt">T</span><span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> <span class="dt">New</span>)</code></pre></div>
-<p>Breadth-first, empty the <code>New</code> before adding the <code>Children</code>:</p>
-<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> []<span class="kw">,</span> <span class="dt">Children</span>)<span class="kw">.</span>
-add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> [<span class="dt">H</span><span class="fu">|</span><span class="dt">T</span>]<span class="kw">,</span> <span class="dt">Children</span>) add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> <span class="dt">T</span><span class="kw">,</span> <span class="dt">New</span>)<span class="kw">.</span> </code></pre></div>
-<p>Bounded Depth First by adding an iteration-counting term:</p>
-<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">bounded_search(<span class="dt">Node</span><span class="kw">,</span> <span class="dt">_</span>) <span class="kw">:-</span> goal(<span class="dt">Node</span>)<span class="kw">.</span>
-bounded_search(<span class="dt">Node</span><span class="kw">,</span> s(<span class="dt">B</span>)) <span class="kw">:-</span> bounded_search(<span class="dt">B</span>)<span class="kw">.</span></code></pre></div>
-<p>Iterative deepening is depth first with a variable bound:</p>
-<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">iterative_deepening(<span class="dt">Node</span>) <span class="kw">:-</span> bound(<span class="dt">B</span>)<span class="kw">,</span> bs(<span class="dt">Next</span><span class="kw">,</span> <span class="dt">B</span>)<span class="kw">.</span>
-
-bound(<span class="dv">0</span>)<span class="kw">.</span>
-bound(s(<span class="dt">B</span>)) <span class="kw">:-</span> bound(<span class="dt">B</span>)<span class="kw">.</span> <span class="co">% easily adjustable</span></code></pre></div>
-<h1 id="knowlege-representation-and-reasoning-1">Knowlege Representation and Reasoning</h1>
-<h2 id="representation-and-reasoning-system-1">Representation and Reasoning System</h2>
-<h3 id="definitions-1">Definitions</h3>
-<ul>
-<li><strong>Formal Language</strong> : legal sentences</li>
-<li><strong>Semantics</strong> : meaning of the symbols</li>
-<li><strong>Reasoning theory/proof procedure</strong> <em>nondeterministic</em> specification for how to produce and answer</li>
-</ul>
-<h3 id="implementation-1">Implementation</h3>
-<ul>
-<li><strong>Language Parser</strong> : Sentences <span class="math inline">→</span> Data Structures</li>
-<li><strong>Reasoning Procedure</strong> : implementation of reasoning theory, search strategey
-<ul>
-<li>Does <em>not</em> reflect semantics (It’s a symbol-system manipluation)</li>
-</ul></li>
-</ul>
-<h3 id="datalog-1">Datalog</h3>
-<p><strong>propositional definite clause</strong> : one of these?</p>
-<ul>
-<li>variable : starts with upper case</li>
-<li>constant : starts with lower case, or is a numeral</li>
-<li>predicate symbol : stars with lower case</li>
-<li>term : variable or a constant</li>
-<li><strong>atomic symbol (atom)</strong> : <span class="math inline"><em>p</em></span> or <span class="math inline"><em>p</em>(<em>t</em><sub>1</sub>, ⋯, <em>t</em><sub><em>n</em></sub>)</span>, with <span class="math inline"><em>p</em></span> a predicate and each <span class="math inline"><em>t</em><sub><em>i</em></sub></span> is a term.</li>
-<li><strong>definite clause</strong> : <span class="math inline"><em>a</em> ← <em>b</em><sub>1</sub> ∧ ⋯ ∧ <em>b</em><sub><em>m</em></sub></span></li>
-<li><strong>query</strong> : <span class="math inline">?<em>b</em>1 ∧ ⋯ ∧ <em>b</em><em>m</em></span></li>
-<li><strong>knowlege base</strong> : set of definite clauses</li>
-</ul>
-<h2 id="semantics-1">Semantics</h2>
-<p>Meaning of sentences in a language</p>
-<h3 id="interpretation-1">Interpretation</h3>
-<p>What is in the world, symbol-to-real-things-and-relations correspondence</p>
-<p>Triple <span class="math inline"><em>I</em> = ⟨<em>D</em>, <em>ϕ</em>, <em>π</em>⟩</span></p>
-<ul>
-<li><strong>D</strong> : Nonempty domain set. Elements are <em>individuals</em></li>
-<li><strong><span class="math inline"><em>ϕ</em></span></strong> : mapping each constant to an individual. A constant <span class="math inline"><em>c</em></span> denotes an individual <span class="math inline"><em>ϕ</em>(<em>c</em>)</span></li>
-<li><strong><span class="math inline"><em>π</em></span></strong> : maps each to <span class="math inline"><em>n</em></span>-ary predicate symbol a relation
-<ul>
-<li>ie <span class="math inline"><em>π</em> : <em>D</em><sup><em>n</em></sup> ↦ {True, False}</span></li>
-</ul></li>
-</ul>
-<h4 id="notes-1">Notes</h4>
-<ul>
-<li><span class="math inline"><em>D</em></span> can be actual real things, not confined to being in a computer.</li>
-<li><span class="math inline"><em>π</em>(<em>p</em>)</span> specifies truthiness for the predicate symbol <span class="math inline"><em>p</em></span>, for each <span class="math inline"><em>n</em></span>-tuple of individuals</li>
-<li>if <span class="math inline"><em>p</em></span> has no arguments, then <span class="math inline"><em>π</em>(<em>p</em>)</span> either True or False.</li>
-</ul>
-<h3 id="truth-in-interpretation-1">Truth in Interpretation</h3>
-<ul>
-<li><span class="math inline"><em>c</em></span> <em>denotes in I</em> the individual <span class="math inline"><em>ϕ</em>(<em>c</em>)</span>.</li>
-<li><strong>Ground</strong> (variable free) atom <span class="math inline"><em>p</em>(<em>t</em><sub>1</sub>, ⋯, <em>t</em><sub><em>n</em></sub>)</span>, in <strong>Interpretation <span class="math inline"><em>I</em></span></strong> is
-<ul>
-<li><strong>True</strong> if <span class="math inline"><em>π</em>(<em>p</em>)(<em>t</em>′<sub>1</sub>, ⋯, <em>t</em>′<sub><em>n</em></sub>)=True</span></li>
-<li><strong>False</strong> if <span class="math inline"><em>π</em>(<em>p</em>)(<em>t</em>′<sub>1</sub>, ⋯, <em>t</em>′<sub><em>n</em></sub>)=False</span>
-<ul>
-<li>Where <span class="math inline"><em>t</em><sub><em>i</em></sub></span> denotes <span class="math inline"><em>t</em>′<sub><em>i</em></sub></span> in interpretation <span class="math inline"><em>I</em></span></li>
-</ul></li>
-</ul></li>
-<li>Ground clause <span class="math inline"><em>h</em> ← <em>b</em><sub>1</sub> ∧ ⋯<em>b</em><sub><em>m</em></sub></span> is <strong>False in <span class="math inline"><em>I</em></span></strong> if <span class="math inline"><em>h</em></span> is False in <span class="math inline"><em>I</em></span> and each <span class="math inline"><em>b</em><sub><em>i</em></sub></span> is True in <span class="math inline"><em>I</em></span>.
-<ul>
-<li>Otherwise it’s <span class="math inline"><em>T</em><em>r</em><em>u</em><em>e</em></span> in <span class="math inline"><em>I</em></span>.</li>
-</ul></li>
-</ul>
-<h3 id="models-logical-consequence-1">Models, Logical Consequence</h3>
-<ul>
-<li>A Knowledge Base <span class="math inline"><em>K</em><em>B</em></span> is True in interpretation <span class="math inline"><em>I</em></span> iff every clause in KB is True in interpretation <span class="math inline"><em>I</em></span> iff every clause in <span class="math inline"><em>K</em><em>B</em></span> is True in I.</li>
-<li>a <strong>model</strong> is an interpretation in which all clauses are True</li>
-<li><span class="math inline"><em>g</em></span> is a <strong>logical consequence</strong> of <span class="math inline"><em>K</em><em>B</em></span> (<span class="math inline"><em>K</em><em>B</em> ⊨ <em>g</em></span>), if <span class="math inline"><em>g</em></span> is True in every models of KB.
-<ul>
-<li>(<span class="math inline"><em>K</em><em>B</em> ⊨ <em>g</em></span>) if there’s no <span class="math inline"><em>I</em></span> such that <span class="math inline"><em>K</em><em>B</em></span> is True <span class="math inline">∧</span> <span class="math inline"><em>g</em></span> is False.</li>
-</ul></li>
-</ul>
-<h4 id="for-users-1">For Users</h4>
-<ol style="list-style-type: decimal">
-<li>Come up with an <strong>intended interpretation</strong> <span class="math inline"><em>I</em></span>
-<ul>
-<li>the problem domain</li>
-</ul></li>
-<li>Pick constants for the relevant individuals
-<ul>
-<li>e.g. <code>shibe</code> for your pet</li>
-</ul></li>
-<li>Pick a predicate symbol for the relations
-<ul>
-<li><code>is_dog</code> to denote a constant’s individual being a dog</li>
-</ul></li>
-<li>Tell it things that are True in <span class="math inline"><em>I</em></span>
-<ul>
-<li>build up the knowlege base by <strong>axiomatizing the domain</strong> )</li>
-<li><code class="sourceCode prolog">is_dog(<span class="dt">X</span>) <span class="kw">:-</span> barks(<span class="dt">X</span>)<span class="kw">.</span></code></li>
-<li><code class="sourceCode prolog">barks(shibe)<span class="kw">.</span></code>, etc.</li>
-</ul></li>
-<li>Ask it things
-<ul>
-<li><code>? is_dog(shibe)</code> <span class="math inline">→</span> <code class="sourceCode prolog">yes</code>.</li>
-</ul></li>
-<li>Now if <span class="math inline"><em>K</em><em>B</em> ⊨ <em>g</em></span>, then <span class="math inline"><em>g</em></span> must be True in <span class="math inline"><em>I</em></span>
-<ul>
-<li>Your pet must indeed be a dog.</li>
-</ul></li>
-</ol>
-<h4 id="for-computers-1">For Computers</h4>
-<ul>
-<li>Knows nothing about the interpretation, only <span class="math inline"><em>K</em><em>B</em></span>.
-<ul>
-<li>What’s a dog? What is barks?</li>
-</ul></li>
-<li><em>Can</em> determine if some <span class="math inline"><em>g</em></span> is an LC of <span class="math inline"><em>K</em><em>B</em></span>, so if <span class="math inline"><em>K</em><em>B</em> ⊨ <em>g</em></span>, then it’s True in <span class="math inline"><em>I</em></span>.</li>
-<li>If <span class="math inline">¬(<em>K</em><em>B</em> ⊨ <em>g</em>)</span>, then <span class="math inline">∃</span> some Interpretation in which <span class="math inline"><em>g</em></span> is False. This could be the intended interpretation I.</li>
-</ul>
-<h2 id="proofs-1">Proofs</h2>
 <ul>
 <li><strong>Proof</strong> : mechanical derivation that formula <em>follows</em> from KB.
 <ul>

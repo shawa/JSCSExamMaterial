@@ -30,7 +30,7 @@ until frontier.empty
     end
 end
 ```
-## Prolog Examples
+## Search Strategies
 
 ```prolog
 search(Start) :- frontier_search([Start]).
@@ -44,28 +44,71 @@ frontier_search([Node|Rest]) :-
 
 The strategy depends on how `add_to_frontier/3` is defined:
 
-Depth-first, empty the `Children` before adding the `New`:
-```prolog
-add_to_frontier([], Rest, Rest).
-add_to_frontier([H|T], Rest, [H, New]) :- add_to_frontier(T, Rest, New)
-```
+### Depth-first,
+* Frontier is a stack; select the last element added to frontier
+* If frontier is $[p_1, p_2, \cdots]$, all paths from $p_1$ are explored before _any_ of $p_2i$.
 
-Breadth-first, empty the `New` before adding the `Children`:
-```prolog
-add_to_frontier(Children, [], Children).
-add_to_frontier(Children, [H|T], Children) add_to_frontier(Children, T, New). 
-```
+* Empty the `Children` before adding the `New`:
+    ```prolog
+    add_to_frontier([], Rest, Rest).
+    add_to_frontier([H|T], Rest, [H, New]) :- add_to_frontier(T, Rest, New)
+    ```
 
-Bounded Depth First by adding an iteration-counting term:
-```prolog
-bounded_search(Node, _) :- goal(Node).
-bounded_search(Node, s(B)) :- bounded_search(B).
-```
+* Not guaranteed to halt, graph may have cycle or be infitnite.
+* Space $O(n)$ in size of current path.
+* Unconstrained by goal until it stumbles on it
 
-Iterative deepening is depth first with a variable bound:
-```prolog
-iterative_deepening(Node) :- bound(B), bs(Next, B).
+### Breadth-first
+* Frontier is a queue; select earliest element.
+* If frontier is $[p_1, p_2, \cdots, p_r]$, neighbours of$p_1$ are explored _after_ all of of $p_2, ... p_r$.
+* empty the `New` before adding the `Children`:
+    ```prolog
+    add_to_frontier(Children, [], Children).
+    add_to_frontier(Children, [H|T], Children) add_to_frontier(Children, T, New).
+    ```
 
-bound(0).
-bound(s(B)) :- bound(B). % easily adjustable
-```
+* **branching factor (BF)** ($b$) : number of neighbours a node has
+* with a finite BF, breadth first _will_ find a solution if it exists.
+* guaranteed to find path with fewest arcs
+* Time $O(b^n)$, exponential in path length ($n$)
+* Space $O(b^n)$, exponential in path length ($n$)
+
+### Bounded Depth First
+* Add an iteration-counting term:
+    ```prolog
+    bounded_search(Node, _) :- goal(Node).
+    bounded_search(Node, s(B)) :- bounded_search(B).
+    ```
+
+### Iterative deepening
+* BDFS with a variable bound:
+    ```prolog
+    iterative_deepening(Node) :- bound(B), bs(Next, B).
+
+    bound(0).
+    bound(s(B)) :- bound(B). % easily adjustable
+    ```
+
+### Lowest Cost First
+* Associate a cost with each arc. Then the cost of a path from $p_1$ to $p_n$ is the sum of all the costs of each of the path's nodes.
+* Select the path with the lowest cost, will find the lowest-cost path.
+* Frontier is a _priority queue ordered by cost_
+* Reduces to **Breadth First** when the costs are all the same.
+
+## Heuristic Search
+* Don't ignore the goal, keep your eyes on the prize; introduce **heuristics** to the search.
+* Define $h(n)$ to estimate the cost of the path from $n$ to the goal node.
+* Only use easily computable information
+* Define $h(\langle n_0, \cdots, n_k \rangle)$ to be $h(n_k)$
+* An underestimate, if there's no path to the goal whose length is less than $h(n)$.
+### $h(n)$ examples
+Depends on the problem domain.
+
+* On the Euclidian plane, could use $||n g||$, where $g$ is the nearest goal node
+* _**If deriving from a Knowlege Base**_, use the **number of atoms in the query**
+* If we're routing between locations, could use $\text{distance to a goal} \div \text{maximum speed we can go}$
+
+### Best First
+* Pick the path whose end is closest to the goal, addording to $h$.
+* Gets a path of minimal $h$ value
+* Frontier is a **priority queue ordered by $h$**.
