@@ -150,4 +150,6 @@ Which means $\text{cost}(p) \leq \text{cost}(p'')$ , $\forall p''$ from $p'$ to 
     - TODO: What on earth is the $g$ value? $h$ value?
 
 ## Constraint Satisfaction
+* CSP problem is defined as $\{V, D, C\}$
+    * **Variables** : $V = \{V_1, \cdots, V_N \}
 

@@ -82,6 +82,8 @@ Finding is hard due to non-determinism, many assignment to check.
 Given a program $P$, and data $D$ return 1 if $P$ halts on $D$, otherwise 0 (if it loops indefinitely).
 It is undecidable.
 
+* $\dagger$ : An intellgient agent must _make progress towards its goals_, if it's not making progress toward its goal, then it's not going to halt. Hence there's no general way to determine if a particular intellgent agent will reach its goal.
+
 ### Proof (by contadiction)
 * Assume for contadiction's sake $\exists$ program $halt(P, D)$ that returns 1 iff P halts on D, otherwise 0.
 * Now construct a new program/string $Z$
