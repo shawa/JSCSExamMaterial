@@ -69,7 +69,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li><a href="#search">Search</a><ul>
 <li><a href="#frontier-search">Frontier Search</a></li>
-<li><a href="#prolog-examples">Prolog Examples</a></li>
+<li><a href="#search-strategies">Search Strategies</a><ul>
+<li><a href="#depth-first">Depth-first,</a></li>
+<li><a href="#breadth-first">Breadth-first</a></li>
+<li><a href="#bounded-depth-first">Bounded Depth First</a></li>
+<li><a href="#iterative-deepening">Iterative deepening</a></li>
+<li><a href="#lowest-cost-first">Lowest Cost First</a></li>
+</ul></li>
+<li><a href="#heuristic-search">Heuristic Search</a><ul>
+<li><a href="#hn-examples"><span class="math inline"><em>h</em>(<em>n</em>)</span> examples</a></li>
+<li><a href="#best-first">Best First</a></li>
+<li><a href="#heuristic-best-first">Heuristic Best First</a></li>
+</ul></li>
+<li><a href="#a-search"><span style="color:red">A* Search</span></a><ul>
+<li><a href="#a-admissibility">A* Admissibility</a></li>
+</ul></li>
+<li><a href="#constraint-satisfaction">Constraint Satisfaction</a></li>
 </ul></li>
 <li><a href="#knowlege-representation-and-reasoning">Knowlege Representation and Reasoning</a><ul>
 <li><a href="#representation-and-reasoning-system">Representation and Reasoning System</a><ul>
@@ -102,14 +117,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul>
 </div>
-<p><meta http-equiv="refresh" content="5"></p>
 <h1 id="background-on-computationai">Background on Computation/AI</h1>
 <h2 id="agent-acting-intelligently-in-its-own-environment-dagger">Agent acting intelligently in its own environment (<span class="math inline">†</span>)</h2>
+<ul>
+<li><strong>Intelligent Action</strong> : Progresses towards its goals
 <ul>
 <li>Actions appropriate for goals</li>
 <li>Flexibile to changing environments &amp; goals</li>
 <li>Learns from Experience</li>
 <li>Appropriate choices for limitations, finite computation</li>
+</ul></li>
 </ul>
 <h3 id="symbol-system-hypothesis">Symbol-System Hypothesis</h3>
 <blockquote>
@@ -257,7 +274,7 @@ search(<span class="dt">Node</span>) <span class="kw">:-</span> arc(<span class=
         add &lt;n_0, ... , n_k, n&gt; to frontier
     <span class="kw">end</span>
 <span class="kw">end</span></code></pre></div>
-<h2 id="prolog-examples">Prolog Examples</h2>
+<h2 id="search-strategies">Search Strategies</h2>
 <div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">search(<span class="dt">Start</span>) <span class="kw">:-</span> frontier_search([<span class="dt">Start</span>])<span class="kw">.</span>
 
 frontier_search([<span class="dt">Node</span><span class="fu">|</span><span class="dt">_</span>]) <span class="kw">:-</span> goal(<span class="dt">Node</span>)<span class="kw">.</span>
@@ -266,20 +283,112 @@ frontier_search([<span class="dt">Node</span><span class="fu">|</span><span clas
     add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> <span class="dt">New</span>)<span class="kw">,</span>  <span class="co">% add the neighbours to the frontier</span>
     frontier_search(<span class="dt">New</span>)<span class="kw">.</span></code></pre></div>
 <p>The strategy depends on how <code>add_to_frontier/3</code> is defined:</p>
-<p>Depth-first, empty the <code>Children</code> before adding the <code>New</code>:</p>
+<h3 id="depth-first">Depth-first,</h3>
+<ul>
+<li>Frontier is a stack; select the last element added to frontier</li>
+<li><p>If frontier is <span class="math inline">[<em>p</em><sub>1</sub>, <em>p</em><sub>2</sub>, ⋯]</span>, all paths from <span class="math inline"><em>p</em><sub>1</sub></span> are explored before <em>any</em> of <span class="math inline"><em>p</em><sub>2</sub><em>i</em></span>.</p></li>
+<li><p>Empty the <code>Children</code> before adding the <code>New</code>:</p>
 <div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">add_to_frontier([]<span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> <span class="dt">Rest</span>)<span class="kw">.</span>
-add_to_frontier([<span class="dt">H</span><span class="fu">|</span><span class="dt">T</span>]<span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> [<span class="dt">H</span>, <span class="dt">New</span>]) <span class="kw">:-</span> add_to_frontier(<span class="dt">T</span><span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> <span class="dt">New</span>)</code></pre></div>
-<p>Breadth-first, empty the <code>New</code> before adding the <code>Children</code>:</p>
+add_to_frontier([<span class="dt">H</span><span class="fu">|</span><span class="dt">T</span>]<span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> [<span class="dt">H</span>, <span class="dt">New</span>]) <span class="kw">:-</span> add_to_frontier(<span class="dt">T</span><span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> <span class="dt">New</span>)</code></pre></div></li>
+<li>Not guaranteed to halt, graph may have cycle or be infitnite.</li>
+<li>Space <span class="math inline"><em>O</em>(<em>n</em>)</span> in size of current path.</li>
+<li><p>Unconstrained by goal until it stumbles on it</p></li>
+</ul>
+<h3 id="breadth-first">Breadth-first</h3>
+<ul>
+<li>Frontier is a queue; select earliest element.</li>
+<li>If frontier is <span class="math inline">[<em>p</em><sub>1</sub>, <em>p</em><sub>2</sub>, ⋯, <em>p</em><sub><em>r</em></sub>]</span>, neighbours of<span class="math inline"><em>p</em><sub>1</sub></span> are explored <em>after</em> all of of <span class="math inline"><em>p</em><sub>2</sub>, ...<em>p</em><sub><em>r</em></sub></span>.</li>
+<li><p>empty the <code>New</code> before adding the <code>Children</code>:</p>
 <div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> []<span class="kw">,</span> <span class="dt">Children</span>)<span class="kw">.</span>
-add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> [<span class="dt">H</span><span class="fu">|</span><span class="dt">T</span>]<span class="kw">,</span> <span class="dt">Children</span>) add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> <span class="dt">T</span><span class="kw">,</span> <span class="dt">New</span>)<span class="kw">.</span> </code></pre></div>
-<p>Bounded Depth First by adding an iteration-counting term:</p>
+add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> [<span class="dt">H</span><span class="fu">|</span><span class="dt">T</span>]<span class="kw">,</span> <span class="dt">Children</span>) add_to_frontier(<span class="dt">Children</span><span class="kw">,</span> <span class="dt">T</span><span class="kw">,</span> <span class="dt">New</span>)<span class="kw">.</span></code></pre></div></li>
+<li><strong>branching factor (BF)</strong> (<span class="math inline"><em>b</em></span>) : number of neighbours a node has</li>
+<li>with a finite BF, breadth first <em>will</em> find a solution if it exists.</li>
+<li>guaranteed to find path with fewest arcs</li>
+<li>Time <span class="math inline"><em>O</em>(<em>b</em><sup><em>n</em></sup>)</span>, exponential in path length (<span class="math inline"><em>n</em></span>)</li>
+<li><p>Space <span class="math inline"><em>O</em>(<em>b</em><sup><em>n</em></sup>)</span>, exponential in path length (<span class="math inline"><em>n</em></span>)</p></li>
+</ul>
+<h3 id="bounded-depth-first">Bounded Depth First</h3>
+<ul>
+<li><p>Add an iteration-counting term:</p>
 <div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">bounded_search(<span class="dt">Node</span><span class="kw">,</span> <span class="dt">_</span>) <span class="kw">:-</span> goal(<span class="dt">Node</span>)<span class="kw">.</span>
-bounded_search(<span class="dt">Node</span><span class="kw">,</span> s(<span class="dt">B</span>)) <span class="kw">:-</span> bounded_search(<span class="dt">B</span>)<span class="kw">.</span></code></pre></div>
-<p>Iterative deepening is depth first with a variable bound:</p>
+bounded_search(<span class="dt">Node</span><span class="kw">,</span> s(<span class="dt">B</span>)) <span class="kw">:-</span> bounded_search(<span class="dt">B</span>)<span class="kw">.</span></code></pre></div></li>
+</ul>
+<h3 id="iterative-deepening">Iterative deepening</h3>
+<ul>
+<li><p>BDFS with a variable bound:</p>
 <div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">iterative_deepening(<span class="dt">Node</span>) <span class="kw">:-</span> bound(<span class="dt">B</span>)<span class="kw">,</span> bs(<span class="dt">Next</span><span class="kw">,</span> <span class="dt">B</span>)<span class="kw">.</span>
 
 bound(<span class="dv">0</span>)<span class="kw">.</span>
-bound(s(<span class="dt">B</span>)) <span class="kw">:-</span> bound(<span class="dt">B</span>)<span class="kw">.</span> <span class="co">% easily adjustable</span></code></pre></div>
+bound(s(<span class="dt">B</span>)) <span class="kw">:-</span> bound(<span class="dt">B</span>)<span class="kw">.</span> <span class="co">% easily adjustable</span></code></pre></div></li>
+</ul>
+<h3 id="lowest-cost-first">Lowest Cost First</h3>
+<ul>
+<li>Associate a cost with each arc. Then the cost of a path from <span class="math inline"><em>p</em><sub>1</sub></span> to <span class="math inline"><em>p</em><sub><em>n</em></sub></span> is the sum of all the costs of each of the path’s nodes.</li>
+<li>Select the path with the lowest cost, will find the lowest-cost path.</li>
+<li>Frontier is a <em>priority queue ordered by cost</em></li>
+<li>Reduces to <strong>Breadth First</strong> when the costs are all the same.</li>
+</ul>
+<h2 id="heuristic-search">Heuristic Search</h2>
+<ul>
+<li>Don’t ignore the goal, keep your eyes on the prize; introduce <strong>heuristics</strong> to the search.</li>
+<li>Define <span class="math inline"><em>h</em>(<em>n</em>)</span> to estimate the cost of the path from <span class="math inline"><em>n</em></span> to the goal node.</li>
+<li>Only use easily computable information</li>
+<li>Define <span class="math inline"><em>h</em>(⟨<em>n</em><sub>0</sub>, ⋯, <em>n</em><sub><em>k</em></sub>⟩)</span> to be <span class="math inline"><em>h</em>(<em>n</em><sub><em>k</em></sub>)</span></li>
+<li>An underestimate, if there’s no path to the goal whose length is less than <span class="math inline"><em>h</em>(<em>n</em>)</span>.</li>
+</ul>
+<h3 id="hn-examples"><span class="math inline"><em>h</em>(<em>n</em>)</span> examples</h3>
+<p>Depends on the problem domain.</p>
+<ul>
+<li>On the Euclidian plane, could use <span class="math inline">||<em>n</em><em>g</em>||</span>, where <span class="math inline"><em>g</em></span> is the nearest goal node</li>
+<li><em><strong>If deriving from a Knowlege Base</strong></em>, use the <strong>number of atoms in the query</strong></li>
+<li>If we’re routing between locations, could use <span class="math inline">distance to a goal ÷ maximum speed we can go</span></li>
+</ul>
+<h3 id="best-first">Best First</h3>
+<ul>
+<li>Pick the path whose end is closest to the goal, addording to <span class="math inline"><em>h</em></span>.</li>
+<li>Gets a path of minimal <span class="math inline"><em>h</em></span> value</li>
+<li>Frontier is a <strong>priority queue ordered by <span class="math inline"><em>h</em></span></strong>.</li>
+<li>Space is exponential in path length.</li>
+<li>Not guaranteed to find a solution, even if there is one.</li>
+<li>Doesn’t always find shortest path.</li>
+</ul>
+<h3 id="heuristic-best-first">Heuristic Best First</h3>
+<ul>
+<li>Order a node’s neighbours by <span class="math inline"><em>h</em></span> <em>before</em> pushing them on to the frontier</li>
+<li>The subtrees are developed locally, but it still explores all paths from the node before moving on to the rest of the frontier</li>
+<li>Linear space in path length</li>
+<li>Does <em>not</em> always find a solution</li>
+</ul>
+<h2 id="a-search"><span style="color:red">A* Search</span></h2>
+<ul>
+<li>Use both the path cost <em>and</em> <span class="math inline"><em>h</em></span>.</li>
+<li>With <span class="math inline">cost(<em>p</em>)</span> the cost of the path p, and <span class="math inline"><em>h</em>(<em>p</em>)</span> the estimate of the end of <span class="math inline"><em>p</em></span> to the goal, let <span class="math inline"><em>f</em>(<em>p</em>)=cost(<em>p</em>)+<em>h</em>(<em>p</em>)</span></li>
+<li><code>start ---cost(p)--&gt; n ---h(n)--&gt; goal</code></li>
+<li>Lowest cost first <em>and</em> best-first.</li>
+<li>Frontier is a <strong>priority queue ordered by <span class="math inline"><em>f</em></span></strong>.</li>
+<li>Always selects node on the frontier with lowest estimated distance from start to goal, when constrained to go through that node.</li>
+</ul>
+<h3 id="a-admissibility">A* Admissibility</h3>
+<ul>
+<li>Always finds a solution if it exists, as long as:
+<ol style="list-style-type: decimal">
+<li>Branching factor is finite</li>
+<li>All of the arc costs are greater than 0. (<span class="math inline">∃<em>ϵ</em> &gt; 0 : ∀arc cost <em>c</em>, <em>c</em> &gt; <em>ϵ</em></span>)</li>
+<li><span class="math inline"><em>h</em>(<em>n</em>)</span> is an <em>underestimate</em> of the shortest path from <span class="math inline"><em>n</em></span> to a goal</li>
+</ol></li>
+</ul>
+<h4 id="proof-of-admissibility">Proof of admissibility</h4>
+<p>Say A* picks a path <span class="math inline"><em>p</em></span> to the goal. This is <em>always</em> the shortest path: Suppose <span class="math inline"><em>p</em>′</span> also on the frontier. <span class="math inline"><em>p</em></span> was chosen before <span class="math inline"><em>p</em>′</span>, and <span class="math inline"><em>h</em>(<em>p</em>)=0</span> (it’s already at the goal), so we know <span class="math inline">cost(<em>p</em>)≤cost(<em>p</em>′) + <em>h</em>(<em>p</em>′)</span>.</p>
+<p>Now <span class="math inline"><em>h</em></span> is an underestimae, so <span class="math inline">cost(<em>p</em>′) + <em>h</em>(<em>p</em>′) ≤ cost(<em>p</em>″)</span>, <span class="math inline">∀<em>p</em>″</span> from <span class="math inline"><em>p</em>′</span> to the goal.</p>
+<p>Which means <span class="math inline">cost(<em>p</em>)≤cost(<em>p</em>″)</span> , <span class="math inline">∀<em>p</em>″</span> from <span class="math inline"><em>p</em>′</span> to the goal.</p>
+<ul>
+<li>There’s always an element of an optimal solution on the frontier, as by the abstract algorithm, there’s an initial part of every path to the goal.</li>
+<li>A* will halt, as the minimum <span class="math inline"><em>g</em></span>-value keeps increasing and tends to infinity.
+<ul>
+<li>TODO: What on earth is the <span class="math inline"><em>g</em></span> value? <span class="math inline"><em>h</em></span> value?</li>
+</ul></li>
+</ul>
+<h2 id="constraint-satisfaction">Constraint Satisfaction</h2>
 <h1 id="knowlege-representation-and-reasoning">Knowlege Representation and Reasoning</h1>
 <h2 id="representation-and-reasoning-system">Representation and Reasoning System</h2>
 <h3 id="definitions">Definitions</h3>

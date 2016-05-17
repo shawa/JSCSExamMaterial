@@ -1,11 +1,10 @@
-<meta http-equiv="refresh" content="5">
-
 # Background on Computation/AI
 ## Agent acting intelligently in its own environment ($\dagger$)
-* Actions appropriate for goals
-* Flexibile to changing environments & goals
-* Learns from Experience
-* Appropriate choices for limitations, finite computation
+* **Intelligent Action** : Progresses towards its goals
+    * Actions appropriate for goals
+    * Flexibile to changing environments & goals
+    * Learns from Experience
+    * Appropriate choices for limitations, finite computation
 
 ### Symbol-System Hypothesis
 > A physical symbol system has the necessary and sufficient means for general intelligent action

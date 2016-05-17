@@ -101,6 +101,7 @@ The strategy depends on how `add_to_frontier/3` is defined:
 * Only use easily computable information
 * Define $h(\langle n_0, \cdots, n_k \rangle)$ to be $h(n_k)$
 * An underestimate, if there's no path to the goal whose length is less than $h(n)$.
+
 ### $h(n)$ examples
 Depends on the problem domain.
 
@@ -148,4 +149,5 @@ Which means $\text{cost}(p) \leq \text{cost}(p'')$ , $\forall p''$ from $p'$ to 
 * A* will halt, as the minimum $g$-value keeps increasing and tends to infinity.
     - TODO: What on earth is the $g$ value? $h$ value?
 
+## Constraint Satisfaction
 
