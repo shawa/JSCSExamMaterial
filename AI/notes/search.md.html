@@ -52,12 +52,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 search(<span class="dt">Node</span>) <span class="kw">:-</span> goal(<span class="dt">Node</span>)<span class="kw">.</span>
 search(<span class="dt">Node</span>) <span class="kw">:-</span> arc(<span class="dt">Node</span><span class="kw">,</span> <span class="dt">Next</span>)<span class="kw">,</span> search(<span class="dt">Next</span>)<span class="kw">.</span></code></pre></div>
 <ul>
+<li><p><em>Example</em>: arcs between bitstrings (count up in binary):</p>
+<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog">arc([<span class="dv">0</span> <span class="fu">|</span> <span class="dt">T</span>]<span class="kw">,</span> [<span class="dv">1</span> <span class="fu">|</span> <span class="dt">T</span>])<span class="kw">.</span>
+arc([<span class="dv">1</span> <span class="fu">|</span> <span class="dt">T</span>]<span class="kw">,</span> [<span class="dv">0</span> <span class="fu">|</span> [<span class="dv">1</span> <span class="fu">|</span> <span class="dt">T</span>]])<span class="kw">.</span></code></pre></div></li>
 <li>Nondeterminism if <code>arc/2</code> has multiple solutions
 <ul>
 <li>Choose the best one (A*, Best first, etc)</li>
 </ul></li>
 <li>Computation eliminates the non-determinism</li>
-<li>Can bound the number of calls to <code>arc</code>, the number of search iterations.</li>
+<li><p>Can bound the number of calls to <code>arc</code>, the number of search iterations.</p></li>
 </ul>
 <h2 id="frontier-search">Frontier Search</h2>
 <ul>

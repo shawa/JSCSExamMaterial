@@ -5,6 +5,18 @@ arc(Node, Next) :- % Something that relates Node to Next.
 search(Node) :- goal(Node).
 search(Node) :- arc(Node, Next), search(Next).
 ```
+
+* _Example_: arcs between bitstrings (count up in binary):
+    ```prolog
+    arc([0 | T], [1 | T]).
+    arc([1 | T], [0 | [1 | T]]).
+
+    % arc([0], [1]).
+    % arc([1], [0, 1]).
+    % arc([0, 1], [1, 1]).
+    % ...
+    % and so on
+    ```
 * Nondeterminism if `arc/2` has multiple solutions
     * Choose the best one (A*, Best first, etc)
 * Computation eliminates the non-determinism
