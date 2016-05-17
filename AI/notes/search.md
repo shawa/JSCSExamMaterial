@@ -151,5 +151,5 @@ Which means $\text{cost}(p) \leq \text{cost}(p'')$ , $\forall p''$ from $p'$ to 
 
 ## Constraint Satisfaction
 * CSP problem is defined as $\{V, D, C\}$
-    * **Variables** : $V = \{V_1, \cdots, V_N \}
-
+    1. **Variables** : $V = \{V_1, \cdots, V_N \}
+    2. ** 

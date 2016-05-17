@@ -1,10 +1,19 @@
 # Background on Computation/AI
 ## Agent acting intelligently in its own environment ($\dagger$)
-* **Intelligent Action** : Progresses towards its goals
+* **Intelligent Action** : An Intelligent Agent makes choices towards realising its goals
     * Actions appropriate for goals
     * Flexibile to changing environments & goals
     * Learns from Experience
     * Appropriate choices for limitations, finite computation
+
+> An agent is intelligent insofar as it makes choices that
+> lead to its goals being realized. SAT is all about satisfying
+> goals expressed as Boolean formulas (by choosing 0 or 1 as
+> values for Boolean variables in the formulas). SAT is known
+> to be in NP; it is not known whether or not SAT is in P
+> (which by Cobham's thesis, would make it feasibly computable).
+> SAT is in P iff P=NP (i.e. non-determinism does not
+> change what is feasibly computable).
 
 ### Symbol-System Hypothesis
 > A physical symbol system has the necessary and sufficient means for general intelligent action
@@ -65,7 +74,7 @@ $$P :=  \{\text{problems solved by a Deterministic Turing Machine in Polynomial 
 
 $$NP:= \{\text{problems solved by a Non-deterministic Turing Machine in Polynomial Time} \}$$
 
-$P$ is clearly $\subseteq NP$ as all DTMS can just be an NTM with only one triple in its $\delta$ relation (in which $\delta$ then defines a function).
+$P$ is "clearly" $\subseteq NP$ as all DTMS can just be an NTM with only one triple in its $\delta$ relation (in which $\delta$ then defines a function).
 
 ## SAT
 For some boolean expression $\phi$, of variables $x_1, x_2, \cdots, x_n$, find an assignment makes $\phi$ evaluate to True.
