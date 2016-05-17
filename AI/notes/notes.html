@@ -120,7 +120,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1 id="background-on-computationai">Background on Computation/AI</h1>
 <h2 id="agent-acting-intelligently-in-its-own-environment-dagger">Agent acting intelligently in its own environment (<span class="math inline">†</span>)</h2>
 <ul>
-<li><strong>Intelligent Action</strong> : Progresses towards its goals
+<li><strong>Intelligent Action</strong> : An Intelligent Agent makes choices towards realising its goals
 <ul>
 <li>Actions appropriate for goals</li>
 <li>Flexibile to changing environments &amp; goals</li>
@@ -128,6 +128,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Appropriate choices for limitations, finite computation</li>
 </ul></li>
 </ul>
+<blockquote>
+<p>An agent is intelligent insofar as it makes choices that lead to its goals being realized. SAT is all about satisfying goals expressed as Boolean formulas (by choosing 0 or 1 as values for Boolean variables in the formulas). SAT is known to be in NP; it is not known whether or not SAT is in P (which by Cobham’s thesis, would make it feasibly computable). SAT is in P iff P=NP (i.e. non-determinism does not change what is feasibly computable).</p>
+</blockquote>
 <h3 id="symbol-system-hypothesis">Symbol-System Hypothesis</h3>
 <blockquote>
 <p>A physical symbol system has the necessary and sufficient means for general intelligent action</p>
@@ -186,7 +189,7 @@ search(<span class="dt">Node</span>) <span class="kw">:-</span> arc(<span class=
 <p>Feasible computation is defined as being solved by a Deterministic Turing Machine in Polynomial time (it’s in <span class="math inline"><em>P</em></span>).</p>
 <p><br /><span class="math display"><em>P</em> := {problems solved by a Deterministic Turing Machine in Polynomial Time}</span><br /></p>
 <p><br /><span class="math display"><em>N</em><em>P</em> := {problems solved by a Non-deterministic Turing Machine in Polynomial Time}</span><br /></p>
-<p><span class="math inline"><em>P</em></span> is clearly <span class="math inline">⊆<em>N</em><em>P</em></span> as all DTMS can just be an NTM with only one triple in its <span class="math inline"><em>δ</em></span> relation (in which <span class="math inline"><em>δ</em></span> then defines a function).</p>
+<p><span class="math inline"><em>P</em></span> is “clearly” <span class="math inline">⊆<em>N</em><em>P</em></span> as all DTMS can just be an NTM with only one triple in its <span class="math inline"><em>δ</em></span> relation (in which <span class="math inline"><em>δ</em></span> then defines a function).</p>
 <h2 id="sat">SAT</h2>
 <p>For some boolean expression <span class="math inline"><em>ϕ</em></span>, of variables <span class="math inline"><em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>, ⋯, <em>x</em><sub><em>n</em></sub></span>, find an assignment makes <span class="math inline"><em>ϕ</em></span> evaluate to True. Checking that it’s True in P is easy, linear in <span class="math inline"><em>n</em></span>. Finding is hard due to non-determinism, many assignment to check.</p>
 <ul>
@@ -200,6 +203,9 @@ search(<span class="dt">Node</span>) <span class="kw">:-</span> arc(<span class=
 </ul>
 <h2 id="halting-problem">Halting Problem</h2>
 <p>Given a program <span class="math inline"><em>P</em></span>, and data <span class="math inline"><em>D</em></span> return 1 if <span class="math inline"><em>P</em></span> halts on <span class="math inline"><em>D</em></span>, otherwise 0 (if it loops indefinitely). It is undecidable.</p>
+<ul>
+<li><span class="math inline">†</span> : An intellgient agent must <em>make progress towards its goals</em>, if it’s not making progress toward its goal, then it’s not going to halt. Hence there’s no general way to determine if a particular intellgent agent will reach its goal.</li>
+</ul>
 <h3 id="proof-by-contadiction">Proof (by contadiction)</h3>
 <ul>
 <li>Assume for contadiction’s sake <span class="math inline">∃</span> program <span class="math inline"><em>h</em><em>a</em><em>l</em><em>t</em>(<em>P</em>, <em>D</em>)</span> that returns 1 iff P halts on D, otherwise 0.</li>
@@ -389,6 +395,13 @@ bound(s(<span class="dt">B</span>)) <span class="kw">:-</span> bound(<span class
 </ul></li>
 </ul>
 <h2 id="constraint-satisfaction">Constraint Satisfaction</h2>
+<ul>
+<li>CSP problem is defined as <span class="math inline">{<em>V</em>, <em>D</em>, <em>C</em>}</span>
+<ol style="list-style-type: decimal">
+<li><strong>Variables</strong> : $V = {V_1, , V_N }</li>
+<li>**</li>
+</ol></li>
+</ul>
 <h1 id="knowlege-representation-and-reasoning">Knowlege Representation and Reasoning</h1>
 <h2 id="representation-and-reasoning-system">Representation and Reasoning System</h2>
 <h3 id="definitions">Definitions</h3>

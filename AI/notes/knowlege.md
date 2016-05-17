@@ -54,7 +54,7 @@ Triple $I = \langle D, \phi, \pi \rangle$
 * a **model** is an interpretation in which all clauses are True
 * $g$ is a **logical consequence** of $KB$ ($KB \models g$), if $g$ is True in every models of KB.
     - ($KB \models g$) if there's no $I$ such that $KB$ is True $\land$ $g$ is False.
-
+* **consistency** : A Knowlege Base is consistent iff $\exists$ at least one model.
 #### For Users
 1. Come up with an **intended interpretation** $I$
     * the problem domain
@@ -193,6 +193,8 @@ Associate most general class with an attribute, don't add properties willy-nilly
 > Any fact not listed in a Knowlege Base is False
 
 The definite clause system is **monotonic**, that is, if we add a clause, it doesn't cause other clauses to be false. (It doesn't invalidate previous conclusions)
+
+* **monotonicity** : The amount of _things we can conclude_ is a monotonic function.
 
 Adding the CKA, the system is **non monotonic**; we _can_ invalidate a conclusion by adding more clauses.
 

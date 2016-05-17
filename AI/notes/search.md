@@ -151,5 +151,7 @@ Which means $\text{cost}(p) \leq \text{cost}(p'')$ , $\forall p''$ from $p'$ to 
 
 ## Constraint Satisfaction
 * CSP problem is defined as $\{V, D, C\}$
-    1. **Variables** : $V = \{V_1, \cdots, V_N \}
-    2. ** 
+    1. **Variables** : $V = \{V_1, \cdots, V_N \}$
+    2. **Domain** : The set of values $D$ which the variables can take
+    3. **Constraints** :$C = \{C_1, \cdots, C_k\}$. A _Constraint_ is tuple $T$ of variable, followed by a tuple of all the values $T$ is allowed to take
+        * e.g. $((V_1, V_2), ((d_1, d_2), (d_3, d_1) \cdots))$
